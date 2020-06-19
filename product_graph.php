@@ -8,6 +8,12 @@
 <?php
 // print $product_main["ean"]; 
 //The variable is there, since it prints
+
+/* This file should be included as:
+
+if (isset($product)) require("html/product_graph.php");
+
+To the file products.php */
 ?> 
 
     
