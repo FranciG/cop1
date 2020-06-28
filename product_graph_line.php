@@ -1,5 +1,7 @@
 
 
+
+
 <div class='row pt_p'>
 
     
@@ -30,7 +32,7 @@ die("Connection failed: " . $mysqli->error);
 }
 
 //Query 
-$query = ("SELECT * FROM graph WHERE ean IN ('".$product_main["ean"]."') group by DAY(created_at);");
+$query = ("SELECT * FROM graph WHERE ean IN ('".$product_main["ean"]."') group by DAY DATE_FORMAT(created_at, '%m-%d-%Y');");
 
 
 
@@ -58,10 +60,11 @@ echo "['".$row["ean"]."', ".$row["created_at"].",".$row["avg_price"]."],<br>";
     <title>MySQL graphics</title>
     <html>
   <head>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-      google.charts.load('current', {'packages':['bar']});
+      google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
+
 
 
       function drawChart() {
@@ -76,15 +79,17 @@ echo "['".$row["ean"]."', ".$row["created_at"].",".$row["avg_price"]."],<br>";
         ]);
 
         var options = {
-          chart: {
-            title: 'El grafico representa la evolución de precios del producto en funcion del tiempo',
-            subtitle: 'Format: Day/Month/Year - Hour',
-          }
+          title: 'Average price evolution',
+          curveType: 'function',
+          legend: { position: 'bottom' }
         };
 
-        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+        
 
-        chart.draw(data, google.charts.Bar.convertOptions(options));
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+
+        chart.draw(data, options);
       }
 
 
@@ -106,7 +111,8 @@ echo "['".$row["ean"]."', ".$row["created_at"].",".$row["avg_price"]."],<br>";
 
 <body>
 
-<div id="columnchart_material" style="width: 800px; height: 500px;"></div>
+<div id="curve_chart" style="width: 900px; height: 500px"></div>
+
 <br>
 <br>
 
@@ -115,6 +121,3 @@ echo "['".$row["ean"]."', ".$row["created_at"].",".$row["avg_price"]."],<br>";
 </html>
 
 </div>
-
-
-   
