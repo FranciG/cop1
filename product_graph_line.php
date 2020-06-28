@@ -32,8 +32,11 @@ die("Connection failed: " . $mysqli->error);
 }
 
 //Query 
-$query = ("SELECT * FROM graph WHERE ean IN ('".$product_main["ean"]."') group by DAY DATE_FORMAT(created_at, '%m-%d-%Y');");
-
+//$query = ("SELECT * FROM graph WHERE ean IN ('".$product_main["ean"]."') group by DAY(created_at);");
+$query= ("SELECT g.id, g.ean, g.avg_price, DATE(g.created_at) created_at
+FROM graph g
+WHERE g.ean = '".$product_main["ean"]."'
+AND g.id = (SELECT MIN(id) FROM graph WHERE ean = g.ean AND DATE(created_at) = DATE(g.created_at))");
 
 
 
