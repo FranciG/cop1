@@ -33,7 +33,11 @@ die("Connection failed: " . $mysqli->error);
 
 //Query 
 //$query = ("SELECT * FROM graph WHERE ean IN ('".$product_main["ean"]."') group by DAY(created_at);");
-$query= ("SELECT g.id, g.ean, g.avg_price, DATE(g.created_at) created_at
+
+//"=" Operator used because comparing against 1 value only
+// function DATE() to get only the date part from created_at
+//correlated subquery in the WHERE clause to get the row with the minimum id (since it does not matter whic row will be returned) of each day
+$query= ("SELECT g.id, g.ean, g.avg_price, DATE_FORMAT(g.created_at, '%d-%m-%Y') created_at
 FROM graph g
 WHERE g.ean = '".$product_main["ean"]."'
 AND g.id = (SELECT MIN(id) FROM graph WHERE ean = g.ean AND DATE(created_at) = DATE(g.created_at))");
