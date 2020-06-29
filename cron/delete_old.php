@@ -12,8 +12,8 @@ if(!$mysqli){
   die("Connection failed: " . $mysqli->error);
 }
 
-//Inset into the table used for price tracking (graph) from the table pt_products
-$query = ("INSERT into graph (ean, avg_price) select ean, round(avg(price),2) avg_price from pt_products group by ean");
+//Delete entries older than 90 days from graph table
+$query = ("DELETE from graph where created_at < now() - interval 90 DAY;");
 
 $mysqli->query("$query");
 $mysqli->close();
