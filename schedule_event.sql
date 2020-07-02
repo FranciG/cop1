@@ -16,6 +16,14 @@ SHOW EVENTS;
 
 --Find all daily prices from an ean, grouped by day of the entry.
 --Database query for a concrete ean
+
 SELECT * FROM graph WHERE ean IN ('00000000271686') group by DAY(created_at);
 --PHP, using variable for the ean
  SELECT * FROM graph WHERE ean IN ('$product_main["ean"]') group by DAY(created_at);
+
+ --Alter eisting table adding two colums
+
+ ALTER TABLE graph
+ADD COLUMN low_price decimal(10,2) not null, 
+ADD COLUMN high_price decimal(10,2) not null;
+

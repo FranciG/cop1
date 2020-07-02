@@ -37,16 +37,20 @@ die("Connection failed: " . $mysqli->error);
 //"=" Operator used because comparing against 1 value only
 // function DATE() to get only the date part from created_at
 //correlated subquery in the WHERE clause to get the row with the minimum id (since it does not matter whic row will be returned) of each day
-$query= ("SELECT g.id, g.ean, g.avg_price, DATE_FORMAT(g.created_at, '%d-%m-%Y') created_at
+/* $query= ("SELECT g.id, g.ean, g.avg_price, DATE_FORMAT(g.created_at, '%d-%m-%Y') created_at
+FROM graph g
+WHERE g.ean = '".$product_main["ean"]."'
+AND g.id = (SELECT MIN(id) FROM graph WHERE ean = g.ean AND DATE(created_at) = DATE(g.created_at))"); */
+
+//New query to add min price and max price
+$query= ("SELECT g.id, g.ean, g.avg_price, g.max_price, g.min_price DATE_FORMAT(g.created_at, '%d-%m-%Y') created_at
 FROM graph g
 WHERE g.ean = '".$product_main["ean"]."'
 AND g.id = (SELECT MIN(id) FROM graph WHERE ean = g.ean AND DATE(created_at) = DATE(g.created_at))");
 
-
-
 $result = mysqli_query($mysqli, $query); 
 
-
+//TODO: Add the additional database fields
 
 /*  //Display query results
 while ($row=mysqli_fetch_assoc ($result)) {
