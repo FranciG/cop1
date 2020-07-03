@@ -43,6 +43,7 @@ WHERE g.ean = '".$product_main["ean"]."'
 AND g.id = (SELECT MIN(id) FROM graph WHERE ean = g.ean AND DATE(created_at) = DATE(g.created_at))"); */
 
 //New query to add min price and max price
+//NOTE: Showing the entry with the lowest id works if the same day has two entries. But the entry with the lowest id may not have, for example, min_price or max_price values, since there may be some mistake done when intserting the data.
 $query= ("SELECT g.id, g.ean, g.avg_price, g.max_price, g.min_price DATE_FORMAT(g.created_at, '%d-%m-%Y') created_at
 FROM graph g
 WHERE g.ean = '".$product_main["ean"]."'
@@ -50,7 +51,7 @@ AND g.id = (SELECT MIN(id) FROM graph WHERE ean = g.ean AND DATE(created_at) = D
 
 $result = mysqli_query($mysqli, $query); 
 
-//TODO: Add the additional database fields
+
 
 /*  //Display query results
 while ($row=mysqli_fetch_assoc ($result)) {
